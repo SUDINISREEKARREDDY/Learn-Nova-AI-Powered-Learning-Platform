@@ -1,0 +1,115 @@
+<% layout('layout/boilerplate') %>
+
+<link rel="stylesheet" href="/CSS/profile.css">
+
+<div class="container profile-page">
+
+  <div class="profile-card shadow-sm">
+
+    <h1 class="text-center">
+      <i class="fas fa-user-circle"></i> Coding Profile Lookup
+    </h1>
+
+    <form id="profile-form" class="mt-4">
+
+      <div class="form-group">
+        <label>Select Platform</label>
+        <select id="platform" class="form-control">
+          <option value="leetcode">LeetCode</option>
+          <option value="codeforces">Codeforces</option>
+          <option value="codechef">CodeChef</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Username</label>
+        <input
+          type="text"
+          id="username"
+          class="form-control"
+          placeholder="Enter username"
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">
+        Get Profile
+      </button>
+
+    </form>
+
+    <div id="profile-result" class="mt-4"></div>
+
+  </div>
+
+</div>
+
+<script>
+document.getElementById("profile-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const platform = document.getElementById("platform").value;
+  const username = document.getElementById("username").value.trim();
+  const resultDiv = document.getElementById("profile-result");
+
+  if (!username) return;
+
+  resultDiv.innerHTML = "<p>Loading profile...</p>";
+
+  try {
+
+    const res = await fetch("/profile/lookup", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({platform, username})
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+
+      const user = data.data;
+
+      let html = `
+        <div class="card shadow-sm">
+        <div class="card-body">
+        <h4>${platform.toUpperCase()}</h4>
+        <p><b>Username:</b> ${user.username}</p>
+      `;
+
+      if(platform === "leetcode"){
+        html += `
+        <p><b>Problems Solved:</b> ${user.solved}</p>
+        <p><b>Rating:</b> ${user.rating}</p>
+        `;
+      }
+
+      if(platform === "codeforces"){
+        html += `
+        <p><b>Rating:</b> ${user.rating}</p>
+        <p><b>Rank:</b> ${user.rank}</p>
+        <p><b>Max Rating:</b> ${user.maxRating}</p>
+        `;
+      }
+
+      if(platform === "codechef"){
+        html += `
+        <p><b>Rating:</b> ${user.rating}</p>
+        <p><b>Contests:</b> ${user.contests}</p>
+        `;
+      }
+
+      html += "</div></div>";
+
+      resultDiv.innerHTML = html;
+
+    } else {
+      resultDiv.innerHTML = `<span class="text-danger">${data.error}</span>`;
+    }
+
+  } catch(err){
+    resultDiv.innerHTML = `<span class="text-danger">${err.message}</span>`;
+  }
+
+});
+</script>

@@ -1,0 +1,212 @@
+<% layout('layout/boilerplate') %>
+
+<link rel="stylesheet" href="/CSS/compiler.css">
+
+<div class="container-fluid compiler-page">
+
+<div class="row">
+
+<!-- EDITOR -->
+
+<div class="col-md-7 editor-section">
+
+<div class="toolbar">
+
+<button onclick="runCode()" class="btn btn-success">
+Run
+</button>
+
+<select id="languageSelect" class="form-control language-dropdown"></select>
+
+</div>
+
+<textarea id="editor">
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello Learnova");
+  }
+}
+</textarea>
+
+<label>Program Input</label>
+<textarea id="input" class="form-control"></textarea>
+
+</div>
+
+
+<!-- OUTPUT -->
+
+<div class="col-md-5 output-section">
+
+<h4>Output</h4>
+
+<pre id="output">Run code to see output...</pre>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+
+<script>
+/* Keep your existing JS logic unchanged */
+</script>
+
+<% layout('layout/boilerplate') %>
+
+<link rel="stylesheet" href="/CSS/compiler.css">
+
+<main class="compiler-wrapper">
+
+  <div class="compiler-layout">
+
+    <!-- LEFT SIDE (EDITOR + INPUT) -->
+    <div class="editor-panel">
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+
+        <div class="toolbar-left">
+          <button onclick="runCode()">▶ Run</button>
+          <button class="debug">🐞 Debug</button>
+          <button class="stop">⛔ Stop</button>
+          <button class="share">🔗 Share</button>
+          <button class="save">💾 Save</button>
+        </div>
+
+        <!-- LANGUAGE DROPDOWN -->
+        <select id="languageSelect"></select>
+
+      </div>
+
+      <!-- CODE EDITOR -->
+      <textarea id="editor">
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello Learnova");
+  }
+}
+      </textarea>
+
+      <!-- INPUT -->
+      <label for="input">Program Input (stdin)</label>
+      <textarea id="input" placeholder="Enter input if required..."></textarea>
+
+    </div>
+
+    <!-- RIGHT SIDE (OUTPUT) -->
+    <div class="output-panel">
+
+      <h2>Output</h2>
+      <pre id="output">Run code to see output...</pre>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- =========================
+     CODEMIRROR CDN
+========================= -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+
+<script>
+
+let editor;
+
+/* =========================
+   LOAD LANGUAGES
+========================= */
+
+async function loadLanguages() {
+
+  try {
+
+    const res = await fetch("/languages");
+    const langs = await res.json();
+
+    const dropdown = document.getElementById("languageSelect");
+    dropdown.innerHTML = "";
+
+    langs.forEach(lang => {
+      const option = document.createElement("option");
+      option.value = lang.id;
+      option.textContent = lang.name;
+      dropdown.appendChild(option);
+    });
+
+    // Initialize CodeMirror
+    editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+      lineNumbers: true,
+      mode: "text/x-java",
+      theme: "dracula",
+      tabSize: 2,
+      indentUnit: 2,
+      matchBrackets: true,
+      autoCloseBrackets: true
+    });
+
+  } catch (err) {
+    console.error("Language Load Error:", err);
+  }
+
+}
+
+
+/* =========================
+   RUN CODE
+========================= */
+
+async function runCode() {
+
+  const language_id = document.getElementById("languageSelect").value;
+  const source_code = editor.getValue();
+  const stdin = document.getElementById("input").value;
+
+  document.getElementById("output").textContent = "⏳ Running...";
+
+  try {
+
+    const res = await fetch("/run", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ language_id, source_code, stdin })
+    });
+
+    const result = await res.json();
+
+    let output = "";
+
+    if (result.stdout) output = result.stdout;
+    else if (result.stderr) output = "Runtime Error:\n" + result.stderr;
+    else if (result.compile_output) output = "Compilation Error:\n" + result.compile_output;
+    else output = "Unknown Error";
+
+    document.getElementById("output").textContent = output;
+
+  } catch (err) {
+
+    console.error(err);
+    document.getElementById("output").textContent = "❌ Server Error";
+
+  }
+
+}
+
+
+
+
+window.onload = loadLanguages;
+
+</script>

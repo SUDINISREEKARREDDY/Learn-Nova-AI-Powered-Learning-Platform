@@ -1,0 +1,35 @@
+<% layout('layout/boilerplate') %>
+
+<main class="learn-page container">
+
+  <div class="learn-card">
+
+    <h1 class="learn-title">
+      <%= data.title %>
+    </h1>
+
+    <p class="learn-description">
+      <%= data.description %>
+    </p>
+
+    <h3 class="example-title">Example Program</h3>
+
+    <div class="code-block">
+      <pre><code><%= data.code %></code></pre>
+    </div>
+
+    <div class="learn-actions">
+
+      <a href="<%= data.docs %>" target="_blank" class="btn btn-outline-primary">
+        <i class="fa-solid fa-book"></i> Official Docs
+      </a>
+
+      <a href="<%= data.practice %>" target="_blank" class="btn btn-success">
+        <i class="fa-solid fa-laptop-code"></i> Practice Now
+      </a>
+
+    </div>
+
+  </div>
+
+</main>

@@ -1,0 +1,99 @@
+<% layout('layout/boilerplate') %>
+
+<link rel="stylesheet" href="/CSS/problem-table.css">
+
+<div class="container practice-page">
+
+  <h1 class="page-title">Practice Problems</h1>
+  <p class="page-subtitle">Sharpen your skills — one problem at a time</p>
+
+  <!-- SEARCH + FILTER -->
+  <div class="filters">
+    <input
+      type="text"
+      id="search"
+      placeholder="🔍 Search problems..."
+      class="search-box"
+    >
+    <select id="difficultyFilter" class="difficulty-filter">
+      <option value="all">All Levels</option>
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+  </div>
+
+  <!-- PROBLEM TABLE -->
+  <table class="problem-table">
+
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Difficulty</th>
+        <th>Score</th>
+        <th>Success Rate</th>
+      </tr>
+    </thead>
+
+    <tbody id="problemTable">
+
+      <% if (problems && problems.length > 0) { %>
+
+        <% problems.forEach((problem, index) => { %>
+
+        <tr
+          data-title="<%= problem.title.toLowerCase() %>"
+          data-difficulty="<%= problem.difficulty.toLowerCase() %>"
+          data-index="<%= index %>"
+          onclick="window.location='/problems/<%= problem._id %>'"
+          class="problem-row"
+        >
+          <td><%= index + 1 %></td>
+          <td class="problem-title"><%= problem.title %></td>
+          <td>
+            <span class="difficulty difficulty-<%= problem.difficulty.toLowerCase() %>">
+              <%= problem.difficulty %>
+            </span>
+          </td>
+          <td><span class="score-val"><%= problem.score %></span></td>
+          <td><span class="rate-val"><%= problem.successRate %>%</span></td>
+        </tr>
+
+        <% }) %>
+
+      <% } %>
+
+    </tbody>
+
+  </table>
+
+</div>
+
+<script>
+// Apply staggered animation via JS (avoids EJS-in-style VS Code warning)
+document.querySelectorAll(".problem-row").forEach(row => {
+  const i = parseInt(row.dataset.index) || 0;
+  row.style.animationDelay = (i * 40) + "ms";
+});
+
+// Search & filter
+const search = document.getElementById("search");
+const filter = document.getElementById("difficultyFilter");
+const rows = document.querySelectorAll("#problemTable tr");
+
+function applyFilter() {
+  const searchText = search.value.toLowerCase();
+  const difficulty = filter.value;
+  rows.forEach(row => {
+    const title = row.dataset.title;
+    const diff = row.dataset.difficulty;
+    const matchSearch = title.includes(searchText);
+    const matchDiff = difficulty === "all" || difficulty === diff;
+    row.style.display = (matchSearch && matchDiff) ? "" : "none";
+  });
+}
+
+search.addEventListener("input", applyFilter);
+filter.addEventListener("change", applyFilter);
+</script>

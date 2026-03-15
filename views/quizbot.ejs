@@ -1,0 +1,148 @@
+<% layout('layout/boilerplate') %>
+
+<link rel="stylesheet" href="/CSS/quizbot.css">
+
+<div class="container quiz-page">
+
+  <h1 class="text-center" style="margin-bottom:4px;">
+    <i class="fa-solid fa-brain" style="color:var(--accent);"></i> QuizBot
+  </h1>
+  <p class="text-center" style="color:var(--text-muted);font-size:.875rem;margin-bottom:28px;">
+    AI-generated quizzes on any topic
+  </p>
+
+  <div class="quiz-form-card">
+    <form id="quiz-form" class="quiz-form">
+
+      <div class="form-group">
+        <label>Topic</label>
+        <input type="text" id="topic" class="form-control" placeholder="e.g. JavaScript, DBMS, OS" required>
+      </div>
+
+      <div class="quiz-form-grid">
+        <div class="form-group">
+          <label>Questions</label>
+          <input type="number" id="numQuestions" class="form-control" value="5" min="1" max="20">
+        </div>
+        <div class="form-group">
+          <label>Duration (min)</label>
+          <input type="number" id="duration" class="form-control" value="5" min="1" max="60">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">
+        <i class="fa-solid fa-play"></i> Start Quiz
+      </button>
+
+    </form>
+  </div>
+
+  <div id="timer" style="display:none;"></div>
+
+  <div id="quiz-section"></div>
+
+  <div id="score-section" class="mt-4"></div>
+
+</div>
+
+<script>
+document.getElementById("quiz-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const topic = document.getElementById("topic").value.trim();
+  const numQuestions = document.getElementById("numQuestions").value;
+  const duration = parseInt(document.getElementById("duration").value, 10);
+
+  const quizDiv = document.getElementById("quiz-section");
+  const scoreDiv = document.getElementById("score-section");
+  const timerDiv = document.getElementById("timer");
+
+  quizDiv.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-muted);font-size:.9rem;">
+    <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem;color:var(--accent);margin-bottom:12px;display:block;"></i>
+    Generating your quiz on <strong style="color:var(--text-primary)">${topic}</strong>...
+  </div>`;
+  scoreDiv.innerHTML = "";
+  timerDiv.style.display = "none";
+
+  try {
+    const res = await fetch("/quizbot/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ topic, numQuestions, duration }),
+    });
+
+    const data = await res.json();
+
+    if (!data.quiz) {
+      quizDiv.innerHTML = `<div style="color:var(--danger);text-align:center;padding:20px;">${data.error || "Failed to generate quiz"}</div>`;
+      return;
+    }
+
+    const quiz = data.quiz;
+    let html = `<form id="exam-form">`;
+
+    quiz.forEach((q, i) => {
+      html += `<div class="question-block">`;
+      html += `<p><span style="color:var(--accent);font-family:var(--font-mono);font-size:.8rem;">Q${i + 1}</span> &nbsp;${q.question}</p>`;
+      q.options.forEach((opt, idx) => {
+        const optionId = `q${i}_opt${idx}`;
+        html += `
+          <label for="${optionId}">
+            <input type="radio" name="q${i}" value="${opt.charAt(0)}" id="${optionId}" required>
+            ${opt}
+          </label>
+        `;
+      });
+      html += `</div>`;
+    });
+
+    html += `<button type="submit" class="btn">Submit Quiz</button></form>`;
+    quizDiv.innerHTML = html;
+
+    // Timer
+    let timeLeft = duration * 60;
+    timerDiv.style.display = "block";
+    const interval = setInterval(() => {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerDiv.innerText = `⏱ ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      if (timeLeft < 60) timerDiv.style.color = "var(--danger)";
+      timeLeft--;
+      if (timeLeft < 0) {
+        clearInterval(interval);
+        document.getElementById("exam-form").requestSubmit();
+      }
+    }, 1000);
+
+    document.getElementById("exam-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      clearInterval(interval);
+
+      let score = 0;
+      quiz.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (selected && selected.value === q.answer) score++;
+      });
+
+      quizDiv.innerHTML = "";
+      timerDiv.style.display = "none";
+
+      const pct = Math.round((score / quiz.length) * 100);
+      scoreDiv.innerHTML = `
+        <div id="score-section" style="display:block;">
+          <div style="font-size:3rem;margin-bottom:8px;">
+            ${pct >= 70 ? "🎉" : pct >= 40 ? "💪" : "📚"}
+          </div>
+          <h2>${score} / ${quiz.length}</h2>
+          <p style="color:var(--text-muted);font-size:.9rem;margin-top:8px;">
+            ${pct}% correct — ${pct >= 70 ? "Great job!" : pct >= 40 ? "Keep practising!" : "Review the topic and try again!"}
+          </p>
+        </div>
+      `;
+    });
+
+  } catch (err) {
+    quizDiv.innerHTML = `<div style="color:var(--danger);text-align:center;padding:20px;">Error: ${err.message}</div>`;
+  }
+});
+</script>

@@ -1,0 +1,184 @@
+/* ===============================
+   COMPILER PAGE
+   =============================== */
+
+.compiler-wrapper {
+  height: calc(100vh - var(--navbar-h));
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+.compiler-layout {
+  display: flex;
+  height: 100%;
+}
+
+/* ---- EDITOR PANEL ---- */
+
+.editor-panel {
+  flex: 1.4;
+  display: flex;
+  flex-direction: column;
+  background: #0d0d14;
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toolbar button {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-secondary) !important;
+  padding: 7px 14px !important;
+  border-radius: var(--radius-sm) !important;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-display);
+  transition: all 0.2s ease;
+  transform: none !important;
+}
+
+.toolbar button:hover {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-hover) !important;
+  color: var(--text-primary) !important;
+  transform: none !important;
+}
+
+/* Run button override */
+.toolbar button.run-btn,
+.toolbar button[onclick="runCode()"] {
+  background: var(--success) !important;
+  border-color: transparent !important;
+  color: white !important;
+  box-shadow: 0 0 16px rgba(16,185,129,0.2);
+}
+
+.toolbar button.run-btn:hover,
+.toolbar button[onclick="runCode()"]:hover {
+  background: #059669 !important;
+  box-shadow: 0 0 24px rgba(16,185,129,0.35);
+}
+
+/* Language dropdown */
+#languageSelect {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm) !important;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  cursor: pointer;
+  min-width: 130px;
+}
+
+/* CodeMirror */
+.CodeMirror {
+  flex: 1;
+  font-family: var(--font-mono) !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  height: auto !important;
+}
+
+.CodeMirror-scroll {
+  flex: 1;
+}
+
+/* Input section */
+.editor-panel label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  padding: 8px 16px 4px;
+  margin: 0;
+  display: block;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+}
+
+#input {
+  width: 100%;
+  height: 90px;
+  background: var(--bg-secondary) !important;
+  border: none !important;
+  border-top: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  resize: none;
+  border-radius: 0 !important;
+  flex-shrink: 0;
+}
+
+#input:focus {
+  outline: none;
+  box-shadow: none !important;
+  border-color: var(--border) !important;
+}
+
+/* ---- OUTPUT PANEL ---- */
+
+.output-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  overflow: hidden;
+}
+
+.output-panel h2 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-2);
+  padding: 14px 20px;
+  margin: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+  flex-shrink: 0;
+}
+
+#output {
+  flex: 1;
+  background: #0a0a0f;
+  color: #4ade80;
+  padding: 20px;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.7;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0;
+  border: none;
+}
+
+/* ---- COMPILER PAGE CONTAINER ---- */
+
+.compiler-page.container-fluid {
+  padding: 0 !important;
+}

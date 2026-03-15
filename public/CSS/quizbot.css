@@ -1,0 +1,206 @@
+/* ===============================
+   QUIZBOT PAGE
+   =============================== */
+
+.quiz-page {
+  max-width: 720px;
+}
+
+.quiz-page h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- QUIZ FORM CARD ---- */
+
+.quiz-form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 36px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-md);
+  animation: card-enter 0.4s ease;
+}
+
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.quiz-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.quiz-form .form-group {
+  margin: 0;
+}
+
+.quiz-form label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.quiz-form .form-control {
+  background: var(--bg-secondary) !important;
+}
+
+.quiz-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.quiz-form .btn-primary.btn-block {
+  padding: 14px;
+  font-size: 0.95rem;
+  margin-top: 4px;
+  background: linear-gradient(135deg, var(--accent), #4f46e5) !important;
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.quiz-form .btn-primary.btn-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--accent-glow);
+}
+
+/* ---- TIMER ---- */
+
+#timer {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--danger);
+  padding: 16px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  letter-spacing: 0.05em;
+  animation: timer-pulse 1s ease-in-out infinite;
+}
+
+@keyframes timer-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ---- QUIZ SECTION ---- */
+
+#quiz-section {
+  margin-top: 8px;
+}
+
+.question-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+  animation: card-enter 0.3s ease both;
+}
+
+.question-block:hover {
+  border-color: var(--border-hover);
+}
+
+.question-block p {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.question-block label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  margin-bottom: 6px;
+}
+
+.question-block label:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.question-block input[type="radio"] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Submit quiz btn */
+#exam-form .btn,
+#exam-form button[type="submit"] {
+  background: var(--success) !important;
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(16,185,129,0.25);
+}
+
+#exam-form button[type="submit"]:hover {
+  background: #059669 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16,185,129,0.4);
+}
+
+/* ---- SCORE SECTION ---- */
+
+#score-section {
+  text-align: center;
+  padding: 40px;
+  background: var(--bg-card);
+  border: 1px solid rgba(16,185,129,0.3);
+  border-radius: var(--radius-xl);
+  animation: score-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes score-pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#score-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--success);
+  font-family: var(--font-mono);
+}

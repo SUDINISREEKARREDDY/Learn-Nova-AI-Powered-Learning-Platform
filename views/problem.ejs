@@ -1,0 +1,152 @@
+<% layout('layout/boilerplate') %>
+
+<link rel="stylesheet" href="/CSS/single.css">
+
+<div class="problem-page">
+
+  <!-- LEFT SIDE : PROBLEM -->
+
+  <div class="problem-left">
+
+    <div class="problem-header">
+
+      <h2><%= problem.title %></h2>
+
+      <span class="difficulty difficulty-<%= problem.difficulty.toLowerCase() %>">
+        <%= problem.difficulty %>
+      </span>
+
+    </div>
+
+    <div class="problem-section">
+
+      <h3>Description</h3>
+
+      <p><%= problem.description %></p>
+
+    </div>
+
+    <div class="problem-section">
+
+      <h3>Constraints</h3>
+
+      <% if (problem.constraints && problem.constraints.length > 0) { %>
+
+      <ul>
+        <% problem.constraints.forEach(c => { %>
+          <li><%= c %></li>
+        <% }) %>
+      </ul>
+
+      <% } else { %>
+
+      <p>No constraints provided.</p>
+
+      <% } %>
+
+    </div>
+
+
+    <div class="problem-section">
+
+      <h3>Examples</h3>
+
+      <% if (problem.sampleTestCases && problem.sampleTestCases.length > 0) { %>
+
+      <% problem.sampleTestCases.forEach(test => { %>
+
+      <div class="example">
+
+        <p><b>Input</b></p>
+        <pre><%= test.input %></pre>
+
+        <p><b>Output</b></p>
+        <pre><%= test.output %></pre>
+
+        <% if (test.explanation) { %>
+        <p><b>Explanation</b> <%= test.explanation %></p>
+        <% } %>
+
+      </div>
+
+      <% }) %>
+
+      <% } else { %>
+
+      <p>No examples provided.</p>
+
+      <% } %>
+
+    </div>
+
+  </div>
+
+
+  <!-- RIGHT SIDE : CODE EDITOR -->
+
+  <div class="problem-right">
+
+    <div class="editor-toolbar">
+
+      <button onclick="runCode()" class="run-btn">▶ Run</button>
+
+      <select id="languageSelect"></select>
+
+    </div>
+
+    <textarea id="editor">
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello Learnova");
+  }
+}
+    </textarea>
+
+    <div class="stdin">
+
+      <label>Input</label>
+
+      <textarea id="input"></textarea>
+
+    </div>
+
+    <div class="output">
+
+      <h4>Output</h4>
+
+      <pre id="output">Run code to see output</pre>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- CodeMirror -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+
+<script>
+
+let editor;
+
+window.onload = async () => {
+
+  editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+    lineNumbers: true,
+    mode: "text/x-java",
+    theme: "dracula"
+  });
+
+};
+
+async function runCode(){
+
+  const code = editor.getValue();
+
+  document.getElementById("output").textContent = "Running...";
+
+}
+
+</script>

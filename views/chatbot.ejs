@@ -1,0 +1,81 @@
+<% layout('layout/boilerplate') %>
+
+<div class="container chatbot-page">
+
+  <div class="chat-card shadow-sm">
+
+    <h1 class="text-center">
+      <i class="fas fa-robot"></i> Query Bot
+    </h1>
+
+    <div id="chat-box" class="chat-box"></div>
+
+    <form id="chat-form" class="chat-form">
+
+      <input
+        type="text"
+        id="message"
+        class="form-control"
+        placeholder="Ask anything..."
+        required
+      >
+
+      <button class="btn btn-primary">
+        Send
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<script>
+
+const chatBox = document.getElementById("chat-box");
+
+document.getElementById("chat-form").addEventListener("submit", async (e)=>{
+
+  e.preventDefault();
+
+  const input = document.getElementById("message");
+  const msg = input.value.trim();
+  if(!msg) return;
+
+  const userBubble = document.createElement("div");
+  userBubble.className="chat-bubble user";
+  userBubble.textContent = msg;
+  chatBox.appendChild(userBubble);
+
+  input.value="";
+
+  const botBubble = document.createElement("div");
+  botBubble.className="chat-bubble bot";
+  botBubble.textContent="Thinking...";
+  chatBox.appendChild(botBubble);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  try{
+
+    const res = await fetch("/chatbot/ask",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({prompt:msg})
+    });
+
+    const data = await res.json();
+
+    botBubble.textContent = data.reply || "No response";
+
+  }catch(err){
+
+    botBubble.textContent="Server Error";
+
+  }
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+});
+
+</script>

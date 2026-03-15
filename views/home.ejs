@@ -1,0 +1,98 @@
+<% layout('layout/boilerplate') %>
+
+<link rel="stylesheet" href="/CSS/languages.css">
+
+<main class="home-container">
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+
+    <div class="hero-eyebrow">
+      <i class="fa-solid fa-terminal"></i> Your Coding Journey Starts Here
+    </div>
+
+    <h1 class="hero-title">
+      <% if (currentUser) { %>
+        Welcome back, <span class="username"><%= currentUser.username %></span> 👋
+      <% } else { %>
+        Master Code.<br><span class="highlight">Build Anything.</span>
+      <% } %>
+    </h1>
+
+    <p class="hero-subtitle">
+      Learn programming languages, solve real problems, and level up your skills — all in one place.
+    </p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">4+</span>
+        <span class="hero-stat-label">Languages</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">100+</span>
+        <span class="hero-stat-label">Problems</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">AI</span>
+        <span class="hero-stat-label">Powered</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- LEARNING SECTION -->
+  <section class="learning-section">
+
+    <div class="section-header">
+      <h2 class="section-title">
+        <i class="fa-solid fa-book-open"></i> Start Learning
+      </h2>
+    </div>
+
+    <div class="language-grid">
+
+      <!-- JAVA -->
+      <div class="language-card" data-lang="java">
+        <div class="language-icon">
+          <i class="fa-brands fa-java"></i>
+        </div>
+        <h3>Java</h3>
+        <p>Object-oriented, platform-independent, enterprise-grade programming.</p>
+        <a href="/learn/java" class="btn btn-block">Start Learning →</a>
+      </div>
+
+      <!-- C -->
+      <div class="language-card" data-lang="c">
+        <div class="language-icon">
+          <i class="fa-solid fa-c"></i>
+        </div>
+        <h3>C</h3>
+        <p>Low-level systems programming, memory management, and OS fundamentals.</p>
+        <a href="/learn/c" class="btn btn-block">Start Learning →</a>
+      </div>
+
+      <!-- PYTHON -->
+      <div class="language-card" data-lang="python">
+        <div class="language-icon">
+          <i class="fa-brands fa-python"></i>
+        </div>
+        <h3>Python</h3>
+        <p>AI, ML, automation and rapid prototyping made simple.</p>
+        <a href="/learn/python" class="btn btn-block">Start Learning →</a>
+      </div>
+
+      <!-- C++ -->
+      <div class="language-card" data-lang="cpp">
+        <div class="language-icon">
+          <i class="fa-solid fa-code"></i>
+        </div>
+        <h3>C++</h3>
+        <p>High-performance competitive programming and system development.</p>
+        <a href="/learn/cpp" class="btn btn-block">Start Learning →</a>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>

@@ -1,0 +1,104 @@
+<nav class="navbar navbar-expand-lg fixed-top">
+
+  <div class="container">
+
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <img src="/images/logo.png" alt="Learnova Logo" class="nav-logo">
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+      <ul class="navbar-nav ml-auto align-items-center">
+
+        <% if (currentUser) { %>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/compiler">
+              <i class="fa-solid fa-code"></i> Compiler
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/practice">
+              <i class="fa-solid fa-laptop-code"></i> Practice
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/chatbot">
+              <i class="fa-solid fa-robot"></i> Query
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/quizbot">
+              <i class="fa-solid fa-circle-question"></i> Quiz
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">
+              <i class="fa-solid fa-user"></i> Profile
+            </a>
+          </li>
+
+          <!-- Divider -->
+          <li class="nav-item nav-divider"></li>
+
+          <!-- Username chip -->
+          <li class="nav-item">
+            <span class="nav-link nav-username">
+              <i class="fa-solid fa-circle" style="font-size:8px; color: var(--success); margin-right:4px;"></i>
+              <%= currentUser.username %>
+            </span>
+          </li>
+
+          <!-- Logout -->
+          <li class="nav-item">
+            <a class="nav-link nav-logout" href="/auth/logout">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </a>
+          </li>
+
+        <% } else { %>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/login">Login</a>
+          </li>
+
+          <li class="nav-item ml-2">
+            <a class="btn btn-primary" href="/auth/register" style="padding: 8px 18px;">
+              Get Started
+            </a>
+          </li>
+
+        <% } %>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+</nav>
+
+<style>
+.nav-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 8px;
+  align-self: center;
+}
+</style>

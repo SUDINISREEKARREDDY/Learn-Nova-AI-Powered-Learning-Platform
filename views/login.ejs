@@ -1,0 +1,56 @@
+<% layout('layout/boilerplate') %>
+
+<script>
+  document.body.setAttribute("data-page", "login");
+</script>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <h2 class="auth-title">
+      <i class="fa-solid fa-lock"></i> Welcome Back
+    </h2>
+    <p class="auth-subtitle">Sign in to continue your learning journey</p>
+
+    <% if (typeof error !== "undefined") { %>
+      <div class="alert alert-danger">
+        <i class="fa-solid fa-circle-exclamation" style="margin-right:6px;"></i><%= error %>
+      </div>
+    <% } %>
+
+    <form action="/auth/login" method="POST" class="auth-form">
+
+      <div class="form-group">
+        <label>Email</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          placeholder="you@example.com"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          placeholder="Enter your password"
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">
+        Sign In →
+      </button>
+
+    </form>
+
+    <p class="auth-switch">
+      Don't have an account? <a href="/auth/register">Create one free</a>
+    </p>
+
+  </div>
+</div>
